@@ -10,3 +10,5 @@ class Profile(models.Model):
 
     class Meta:
         db_table = 'oc_lettings_site_profile'
+        verbose_name = 'Profile'
+        verbose_name_plural = 'Profiles'
