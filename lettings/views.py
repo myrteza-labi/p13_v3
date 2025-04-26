@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from .models import Letting
 
 
@@ -28,9 +28,13 @@ def index(request):
 # risus. Mauris condimentum auctor elementum. Donec quis nisi ligula. 
 # Integer vehicula tincidunt enim, ac lacinia augue pulvinar sit amet.
 def letting(request, letting_id):
-    letting = get_object_or_404(Letting, id=letting_id)
-    context = {
-        'title': letting.title,
-        'address': letting.address,
-    }
-    return render(request, 'lettings/letting.html', context)
+    try:
+        letting = Letting.objects.get(id=letting_id)
+        context = {
+            'title': letting.title,
+            'address': letting.address,
+        }
+        return render(request, 'lettings/letting.html', context)
+    except Letting.DoesNotExist:
+        context = {'letting_id': letting_id}
+        return render(request, 'lettings/letting_404.html', context, status=404)
