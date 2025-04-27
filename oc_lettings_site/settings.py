@@ -6,7 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-
+import logging
 
 load_dotenv()
 
@@ -135,3 +135,41 @@ if SENTRY_DSN:
         traces_sample_rate=1.0,  # 100% des transactions
         send_default_pii=True,   # Envoie aussi les infos de l'utilisateur connecté
     )
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # Important pour ne pas écraser les logs Django par défaut
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {  # Log affiché dans la console (terminal)
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'sentry': {  # Log envoyé à Sentry
+            'class': 'sentry_sdk.integrations.logging.EventHandler',
+            'level': 'ERROR',  # On envoie uniquement les logs d'erreurs et plus graves
+        },
+    },
+    'loggers': {
+        'django': {  # Le logger Django de base
+            'handlers': ['console', 'sentry'],
+            'level': 'INFO',  # Niveau minimal pour logger
+            'propagate': True,
+        },
+        '': {  # Le logger racine pour tout ton code
+            'handlers': ['console', 'sentry'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
