@@ -149,6 +149,7 @@ Un système de logging Django est actif :
 Vous pouvez accéder à :
 http://localhost:8000/sentry-debug/
 
+
 Cela provoquera volontairement une division par zéro, pour tester l'envoi des erreurs à Sentry.
 
 Résumé des bonnes pratiques
