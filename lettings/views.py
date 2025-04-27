@@ -9,9 +9,11 @@ logger = logging.getLogger(__name__)
 # Aenean leo magna, vestibulum et tincidunt fermentum,
 # consectetur quis velit. Sed non placerat massa.
 # Integer est nunc, pulvinar a
-# tempor et, bibendum id arcu. Vestibulum ante ipsum 
-# primis in faucibus orci luctus et ultrices 
+# tempor et, bibendum id arcu. Vestibulum ante ipsum
+# primis in faucibus orci luctus et ultrices
 # posuere cubilia curae; Cras eget scelerisque
+
+
 def index(request):
     """View to display the list of all lettings."""
     lettings_list = Letting.objects.all()
@@ -27,11 +29,11 @@ def index(request):
 # Maecenas auctor, est ut luctus congue, dui enim mattis enim, ac
 # condimentum velit libero in magna. Suspendisse potenti.
 # In tempus a nisi sed laoreet.
-# Suspendisse porta dui eget sem accumsan interdum. Ut quis 
-# urna pellentesque justo mattis ullamcorper ac non tellus. In 
+# Suspendisse porta dui eget sem accumsan interdum. Ut quis
+# urna pellentesque justo mattis ullamcorper ac non tellus. In
 # tristique mauris eu velit fermentum, tempus pharetra est luctus.
-# Vivamus consequat aliquam libero, eget bibendum lorem. Sed non dolor 
-# risus. Mauris condimentum auctor elementum. Donec quis nisi ligula. 
+# Vivamus consequat aliquam libero, eget bibendum lorem. Sed non dolor
+# risus. Mauris condimentum auctor elementum. Donec quis nisi ligula.
 # Integer vehicula tincidunt enim, ac lacinia augue pulvinar sit amet.
 def letting(request, letting_id):
     """View to display the details of a specific letting."""

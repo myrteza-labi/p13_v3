@@ -6,6 +6,7 @@ from django.urls import reverse, resolve
 from profiles.models import Profile
 from profiles.views import index, profile
 
+
 class ProfileModelTest(TestCase):
     """Test the Profile model."""
 

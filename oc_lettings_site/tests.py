@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from oc_lettings_site import views
 
+
 class SiteViewsTest(TestCase):
     """Tests for oc_lettings_site views."""
 

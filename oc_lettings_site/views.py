@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 # Aliquam vitae erat ac orci placerat luctus. Nullam elementum urna
 # nisi, pellentesque iaculis enim cursus in. Praesent volutpat
 # porttitor magna, non finibus neque cursus id.
+
+
 def index(request):
     """View to display the home page."""
     return render(request, 'index.html')

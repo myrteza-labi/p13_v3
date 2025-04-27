@@ -5,6 +5,7 @@ from django.urls import reverse, resolve
 from lettings.models import Address, Letting
 from lettings.views import index, letting
 
+
 class AddressModelTest(TestCase):
     """Test the Address model."""
 
@@ -19,6 +20,7 @@ class AddressModelTest(TestCase):
             country_iso_code="GBR"
         )
         self.assertEqual(str(address), "123 Baker Street")
+
 
 class LettingModelTest(TestCase):
     """Test the Letting model."""
@@ -38,6 +40,7 @@ class LettingModelTest(TestCase):
             address=address
         )
         self.assertEqual(str(letting), "Sherlock Holmes Apartment")
+
 
 class LettingsViewsTest(TestCase):
     """Tests for lettings views (index and detail)."""
