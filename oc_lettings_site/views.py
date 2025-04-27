@@ -1,3 +1,6 @@
+"""Views for the oc_lettings_site app."""
+
+
 from django.shortcuts import render
 
 
@@ -10,8 +13,12 @@ from django.shortcuts import render
 # nisi, pellentesque iaculis enim cursus in. Praesent volutpat 
 # porttitor magna, non finibus neque cursus id.
 def index(request):
+    """View to display the home page."""
+
     return render(request, 'index.html')
 
 
 def custom_404(request, exception):
+    """Custom handler for 404 errors."""
+
     return render(request, '404.html', status=404)
