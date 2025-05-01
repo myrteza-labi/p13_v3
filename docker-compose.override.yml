@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  web:
+    volumes:
+      - .:/app
+      - ./oc-lettings-site.sqlite3:/app/oc-lettings-site.sqlite3
+    environment:
+      DEBUG: "True"
