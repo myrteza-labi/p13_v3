@@ -11,16 +11,19 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copier l'ensemble du projet dans le conteneur
 COPY . .
 
-# 🔍 Debug : afficher le contenu du dossier fixtures
-RUN echo "Contenu du dossier fixtures :" && ls -l fixtures
+# ✅ Debug : Affiche le contenu de fixtures/lettings.json
+RUN echo "=== Contenu initial de fixtures/lettings.json ===" && cat fixtures/lettings.json && echo "=== Fin ==="
 
-# 🧹 Retirer le BOM des fichiers .json
+# 🧹 Supprimer le BOM UTF-8 (Byte Order Mark) des fichiers JSON
 RUN python3 -c "import glob; [open(p, 'wb').write(open(p, 'rb').read().lstrip(b'\xef\xbb\xbf')) for p in glob.glob('fixtures/*.json')]"
+
+# ✅ Debug : Affiche à nouveau le contenu après nettoyage BOM
+RUN echo '=== Contenu après nettoyage BOM ===' && cat fixtures/lettings.json && echo "=== Fin ==="
 
 # Exposer le port utilisé par l'application
 EXPOSE 8000
 
-# CMD : migrations, chargement fixtures, collectstatic, gunicorn
+# CMD : applique migrations, charge les fixtures, collecte les statics, puis démarre Gunicorn
 CMD ["sh", "-c", "\
     python manage.py migrate --noinput && \
     python manage.py loaddata fixtures/lettings.json fixtures/profiles.json && \
