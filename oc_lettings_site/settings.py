@@ -1,6 +1,7 @@
 """Django settings for the oc_lettings_site project."""
 
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 import sentry_sdk
@@ -94,7 +95,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Use ManifestStaticFilesStorage in production, default in tests/CI
+if len(sys.argv) > 1 and sys.argv[1] == 'test':
+    STATICFILES_STORAGE = (
+        'django.contrib.staticfiles.storage.StaticFilesStorage'
+    )
+else:
+    STATICFILES_STORAGE = (
+        'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    )
 
 SENTRY_DSN = os.getenv('SENTRY_DSN')
 if SENTRY_DSN:
@@ -109,18 +119,35 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'verbose': {'format': '{levelname} {asctime} {module} {message}', 'style': '{'},
-        'simple': {'format': '{levelname} {message}', 'style': '{'},
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
     },
     'handlers': {
-        'console': {'class': 'logging.StreamHandler', 'formatter': 'verbose'},
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
         'sentry': {
             'class': 'sentry_sdk.integrations.logging.EventHandler',
             'level': 'ERROR',
         },
     },
     'loggers': {
-        'django': {'handlers': ['console', 'sentry'], 'level': 'INFO', 'propagate': True},
-        '': {'handlers': ['console', 'sentry'], 'level': 'INFO', 'propagate': True},
+        'django': {
+            'handlers': ['console', 'sentry'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        '': {
+            'handlers': ['console', 'sentry'],
+            'level': 'INFO',
+            'propagate': True,
+        },
     },
 }
