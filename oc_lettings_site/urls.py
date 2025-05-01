@@ -22,6 +22,5 @@ urlpatterns = [
     path('sentry-debug/', trigger_error),
 ]
 
-# Serve static files only when DEBUG=True
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# Serve static files in all environments (even when DEBUG=False)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
