@@ -11,13 +11,24 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copier l'ensemble du projet dans le conteneur
 COPY . .
 
-# ✅ Debug : Affiche le contenu de fixtures/lettings.json
+# ✅ Debug : Affiche le contenu initial de fixtures/lettings.json
 RUN echo "=== Contenu initial de fixtures/lettings.json ===" && cat fixtures/lettings.json && echo "=== Fin ==="
 
-# 🧹 Supprimer le BOM UTF-8 (Byte Order Mark) des fichiers JSON
-RUN python3 -c "import glob; [open(p, 'wb').write(open(p, 'rb').read().lstrip(b'\xef\xbb\xbf')) for p in glob.glob('fixtures/*.json')]"
+# ✅ Ajouter un script pour nettoyer le BOM
+RUN echo '\
+import glob\n\
+for p in glob.glob("fixtures/*.json"):\n\
+    with open(p, "rb") as f:\n\
+        content = f.read()\n\
+    if content.startswith(b"\xef\xbb\xbf"):\n\
+        with open(p, "wb") as f_out:\n\
+            f_out.write(content.lstrip(b"\xef\xbb\xbf"))\n\
+' > remove_bom.py
 
-# ✅ Debug : Affiche à nouveau le contenu après nettoyage BOM
+# ✅ Exécuter le script de nettoyage BOM
+RUN python3 remove_bom.py
+
+# ✅ Debug : Affiche le contenu après nettoyage BOM
 RUN echo '=== Contenu après nettoyage BOM ===' && cat fixtures/lettings.json && echo "=== Fin ==="
 
 # Exposer le port utilisé par l'application
@@ -25,10 +36,10 @@ EXPOSE 8000
 
 # CMD : applique migrations, charge les fixtures, collecte les statics, puis démarre Gunicorn
 CMD ["sh", "-c", "\
-    python manage.py migrate --noinput && \
-    ls -lh fixtures && \
-    cat fixtures/lettings.json && \
-    python manage.py loaddata fixtures/lettings.json fixtures/profiles.json && \
-    python manage.py collectstatic --noinput && \
-    gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000\
+    echo '🧪 Fichiers JSON présents :' && ls -lh fixtures && \
+    echo '📄 Contenu de lettings.json :' && cat fixtures/lettings.json && \
+    echo '🚀 MIGRATIONS' && python manage.py migrate --noinput && \
+    echo '📦 LOADDATA' && python manage.py loaddata fixtures/lettings.json fixtures/profiles.json && \
+    echo '🧹 COLLECTSTATIC' && python manage.py collectstatic --noinput && \
+    echo '🔥 Gunicorn Start' && gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000\
 "]
