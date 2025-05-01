@@ -2,14 +2,13 @@
 
 from django.contrib import admin
 from django.urls import path, include
-
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
-
 
 def trigger_error(request):
     """View to trigger a division by zero error for Sentry test."""
     1 / 0  # Force an intentional error
-
 
 handler404 = 'oc_lettings_site.views.custom_404'
 
@@ -20,3 +19,7 @@ urlpatterns = [
     path('profiles/', include('profiles.urls', namespace='profiles')),
     path('sentry-debug/', trigger_error),
 ]
+
+# Ajoute les fichiers statiques uniquement en mode DEBUG
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

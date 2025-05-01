@@ -1,0 +1,9 @@
+# Ne pas embarquer la base SQLite locale
+*.sqlite3
+
+# Ne pas embarquer les variables d'environnement sensibles
+.env
+
+# Ignorer les caches Python
+__pycache__/
+*.pyc

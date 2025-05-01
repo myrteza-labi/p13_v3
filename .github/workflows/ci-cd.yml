@@ -44,11 +44,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Docker image
-        run: docker build -t martinlabi/oc-lettings-site:${{ github.sha }} .
+        run: |
+          docker build -t martinlabi/oc-lettings-site:${{ github.sha }} .
+          docker tag martinlabi/oc-lettings-site:${{ github.sha }} martinlabi/oc-lettings-site:latest
 
       - name: Login to Docker Hub
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker image to Docker Hub
-        run: docker push martinlabi/oc-lettings-site:${{ github.sha }}
+        run: |
+          docker push martinlabi/oc-lettings-site:${{ github.sha }}
+          docker push martinlabi/oc-lettings-site:latest
