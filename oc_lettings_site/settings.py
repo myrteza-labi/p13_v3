@@ -97,13 +97,15 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Use ManifestStaticFilesStorage in production, default in tests/CI
+# En tests/CI, on reste sur le stockage Django standard,
+# en prod on utilise WhiteNoise compressé sans manifeste
 if len(sys.argv) > 1 and sys.argv[1] == 'test':
     STATICFILES_STORAGE = (
         'django.contrib.staticfiles.storage.StaticFilesStorage'
     )
 else:
     STATICFILES_STORAGE = (
-        'whitenoise.storage.CompressedManifestStaticFilesStorage'
+        'whitenoise.storage.CompressedStaticFilesStorage'
     )
 
 SENTRY_DSN = os.getenv('SENTRY_DSN')
