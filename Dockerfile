@@ -11,13 +11,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copier l'ensemble du projet dans le conteneur
 COPY . .
 
-# Strip BOM des fixtures JSON avant tout
-RUN python3 - << 'EOF'
-import glob
-for path in glob.glob('fixtures/*.json'):
-    data = open(path, 'rb').read().lstrip(b'\xef\xbb\xbf')
-    open(path, 'wb').write(data)
-EOF
+# Strip BOM des fixtures JSON avant tout (exécuté via bash -c)
+RUN bash -c "python3 -c \"import glob; [open(p, 'wb').write(open(p, 'rb').read().lstrip(b'\\xef\\xbb\\xbf')) for p in glob.glob('fixtures/*.json')]\""
 
 # Exposer le port utilisé par l'application
 EXPOSE 8000
