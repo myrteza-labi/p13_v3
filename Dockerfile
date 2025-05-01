@@ -39,7 +39,7 @@ CMD ["sh", "-c", "\
     echo '🧪 Fichiers JSON présents :' && ls -lh fixtures && \
     echo '📄 Contenu de lettings.json :' && cat fixtures/lettings.json && \
     echo '🚀 MIGRATIONS' && python manage.py migrate --noinput && \
-    echo '📦 LOADDATA' && python manage.py loaddata fixtures/lettings.json fixtures/profiles.json && \
+    echo '📦 LOADDATA' && python manage.py loaddata fixtures/users.json fixtures/lettings.json fixtures/profiles.json && \
     echo '🧹 COLLECTSTATIC' && python manage.py collectstatic --noinput && \
     echo '🔥 Gunicorn Start' && gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000\
 "]

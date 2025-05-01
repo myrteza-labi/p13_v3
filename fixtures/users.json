@@ -1,0 +1,47 @@
+[
+    {
+      "model": "auth.user",
+      "pk": 2,
+      "fields": {
+        "username": "user2",
+        "password": "pbkdf2_sha256$260000$sxXptNXXl0iLg7RPj8fsEI$zSv3PtFTlLtPq3oNHavRwOTmkD0MLDwMaXU5qP+2bGw=",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 3,
+      "fields": {
+        "username": "user3",
+        "password": "pbkdf2_sha256$260000$sxXptNXXl0iLg7RPj8fsEI$zSv3PtFTlLtPq3oNHavRwOTmkD0MLDwMaXU5qP+2bGw=",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 4,
+      "fields": {
+        "username": "user4",
+        "password": "pbkdf2_sha256$260000$sxXptNXXl0iLg7RPj8fsEI$zSv3PtFTlLtPq3oNHavRwOTmkD0MLDwMaXU5qP+2bGw=",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
+      }
+    },
+    {
+      "model": "auth.user",
+      "pk": 5,
+      "fields": {
+        "username": "user5",
+        "password": "pbkdf2_sha256$260000$sxXptNXXl0iLg7RPj8fsEI$zSv3PtFTlLtPq3oNHavRwOTmkD0MLDwMaXU5qP+2bGw=",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
+      }
+    }
+  ]
+  
