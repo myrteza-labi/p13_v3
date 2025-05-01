@@ -11,7 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copier l'ensemble du projet dans le conteneur
 COPY . .
 
-# --- strip BOM des fixtures JSON avant tout ---
+# Strip BOM des fixtures JSON avant tout
 RUN python3 - << 'EOF'
 import glob
 for path in glob.glob('fixtures/*.json'):
@@ -23,9 +23,4 @@ EOF
 EXPOSE 8000
 
 # CMD : applique migrations, charge les fixtures, collecte les statics, puis démarre Gunicorn
-CMD ["sh", "-c", "\
-    python manage.py migrate --noinput && \
-    python manage.py loaddata fixtures/lettings.json fixtures/profiles.json && \
-    python manage.py collectstatic --noinput && \
-    gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000\
-"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py loaddata fixtures/lettings.json fixtures/profiles.json && python manage.py collectstatic --noinput && gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000"]
