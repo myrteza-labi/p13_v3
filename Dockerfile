@@ -26,6 +26,8 @@ EXPOSE 8000
 # CMD : applique migrations, charge les fixtures, collecte les statics, puis démarre Gunicorn
 CMD ["sh", "-c", "\
     python manage.py migrate --noinput && \
+    ls -lh fixtures && \
+    cat fixtures/lettings.json && \
     python manage.py loaddata fixtures/lettings.json fixtures/profiles.json && \
     python manage.py collectstatic --noinput && \
     gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000\
