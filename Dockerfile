@@ -1,4 +1,4 @@
-# Utiliser une image officielle de Python
+# Dockerfile
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -10,11 +10,17 @@ COPY . .
 
 EXPOSE 8000
 
-# Apply migrations, strip BOM from fixtures, load fixtures, collect statics, then start Gunicorn
-CMD ["sh", "-c", "\
+# 1. migrate
+# 2. strip BOM des fixtures (en Python)
+# 3. loaddata
+# 4. collectstatic
+# 5. démarrage de gunicorn
+CMD ["sh","-c", "\
     python manage.py migrate --noinput && \
-    # Retire l’éventuel BOM au début des fichiers fixtures JSON \
-    for f in fixtures/*.json; do sed -i '1s/^\\xEF\\xBB\\xBF//' \"$f\"; done && \
+    python -c \"import glob, io; \
+for p in glob.glob('fixtures/*.json'): \
+    b = open(p,'rb').read(); \
+    open(p,'wb').write(b.lstrip(b'\\xef\\xbb\\xbf'))\" && \
     python manage.py loaddata fixtures/lettings.json fixtures/profiles.json && \
     python manage.py collectstatic --noinput && \
     gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000\
