@@ -15,12 +15,9 @@ EXPOSE 8000
 # 3. loaddata
 # 4. collectstatic
 # 5. démarrage de gunicorn
-CMD ["sh","-c", "\
+CMD ["sh", "-c", "\
     python manage.py migrate --noinput && \
-    python -c \"import glob, io; \
-for p in glob.glob('fixtures/*.json'): \
-    b = open(p,'rb').read(); \
-    open(p,'wb').write(b.lstrip(b'\\xef\\xbb\\xbf'))\" && \
+    python -c \"import glob;[open(p,'wb').write(open(p,'rb').read().lstrip(b'\\xef\\xbb\\xbf')) for p in glob.glob('fixtures/*.json')]\" && \
     python manage.py loaddata fixtures/lettings.json fixtures/profiles.json && \
     python manage.py collectstatic --noinput && \
     gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000\
