@@ -6,75 +6,77 @@ L’interface est simple et se compose principalement de trois sections : page d
 
 ---
 
-1. Consulter la page d’accueil
-------------------------------
+1. Page d’accueil
+-----------------
 
 **URL** : `/`  
-**But** : Présenter une page d’accueil avec liens vers les profils et les locations.
+**But** : Présenter la page principale du site.
 
-**Étapes** :
-- L’utilisateur accède à la racine du site
-- Il voit un lien vers la liste des profils
-- Il voit un lien vers la liste des logements
+**Fonctionnement** :
+- Affiche un message d’accueil simple.
+- Propose deux liens : un vers la liste des profils, un vers la liste des logements.
+- Utilise le gabarit `index.html`.
 
 ---
 
-2. Afficher la liste des profils
---------------------------------
+2. Liste des profils
+--------------------
 
 **URL** : `/profiles/`  
 **But** : Visualiser tous les utilisateurs enregistrés.
 
-**Étapes** :
-- L’utilisateur clique sur “Profils”
-- Il voit la liste des utilisateurs avec leur nom
-- Il peut cliquer sur un nom pour voir les détails
+**Fonctionnement** :
+- Affiche une liste de noms d’utilisateurs.
+- Chaque nom est cliquable pour accéder au profil complet.
+- Utilise le gabarit `profiles/index.html`.
 
 ---
 
-3. Consulter un profil utilisateur
-----------------------------------
+3. Détail d’un profil
+---------------------
 
 **URL** : `/profiles/<username>/`  
-**But** : Voir les détails d’un utilisateur spécifique.
+**But** : Afficher les informations d’un utilisateur spécifique.
 
-**Étapes** :
-- L’utilisateur accède à une page de profil
-- Il voit la ville préférée de la personne
+**Fonctionnement** :
+- Affiche le nom d’utilisateur et sa ville préférée.
+- En cas de profil inexistant, redirige vers une page 404 personnalisée (`profiles/profile_404.html`).
+- Utilise le gabarit `profiles/profile.html`.
 
 ---
 
-4. Afficher la liste des logements
-----------------------------------
+4. Liste des logements
+----------------------
 
 **URL** : `/lettings/`  
-**But** : Voir tous les logements proposés à la location.
+**But** : Consulter tous les logements disponibles à la location.
 
-**Étapes** :
-- L’utilisateur clique sur “Lettings”
-- Il voit une liste de logements avec leurs titres
+**Fonctionnement** :
+- Affiche une liste de titres de logements.
+- Chaque titre est cliquable pour afficher les détails.
+- Utilise le gabarit `lettings/index.html`.
 
 ---
 
-5. Consulter un logement spécifique
------------------------------------
+5. Détail d’un logement
+-----------------------
 
 **URL** : `/lettings/<id>/`  
-**But** : Voir les détails d’un logement.
+**But** : Visualiser les détails d’un logement.
 
-**Étapes** :
-- L’utilisateur clique sur un titre de logement
-- Il voit l’adresse complète
+**Fonctionnement** :
+- Affiche le titre et l’adresse complète du logement.
+- En cas d’ID invalide, redirige vers une page 404 personnalisée (`lettings/letting_404.html`).
+- Utilise le gabarit `lettings/letting.html`.
 
 ---
 
-6. Tester l’envoi d’erreurs à Sentry (dev uniquement)
-------------------------------------------------------
+6. Test Sentry (développeur uniquement)
+---------------------------------------
 
 **URL** : `/sentry-debug/`  
-**But** : Provoquer une erreur pour tester l’intégration de Sentry.
+**But** : Provoquer une erreur pour vérifier l’intégration Sentry.
 
-**Étapes** :
-- L’utilisateur accède à `/sentry-debug/`
-- Une division par zéro est volontairement provoquée
-- L’erreur est envoyée à Sentry si `SENTRY_DSN` est configuré
+**Fonctionnement** :
+- Accéder à cette URL déclenche une division par zéro.
+- L’erreur est automatiquement envoyée à Sentry si la variable `SENTRY_DSN` est définie.
