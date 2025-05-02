@@ -214,7 +214,7 @@ Avant tout déploiement, assurez-vous d’avoir :
 
 ---
 
-#### 2. Déploiement/test local avec Docker Compose
+#### 2. Déploiement/test local avec Docker Compose.
 
 1. Copier ou créer un fichier `.env` :
    ```env
