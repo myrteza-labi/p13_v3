@@ -158,3 +158,80 @@ Résumé des bonnes pratiques
 - Les logs sont présents uniquement aux endroits nécessaires.
 - La couverture de tests dépasse 90%.
 - Le projet est prêt pour un déploiement cloud avec monitoring d'erreurs intégré.
+
+## Déploiement
+
+### Fonctionnement général
+
+Le projet est déployé automatiquement à chaque `push` sur la branche `main`.  
+Voici le fonctionnement global du déploiement :
+
+1. **GitHub Actions** teste le code (`flake8`, `coverage`) puis crée une image Docker.
+2. Cette image est **poussée automatiquement sur Docker Hub** (`martinlabi/oc-lettings-site`).
+3. **Render** télécharge cette image, lit les variables d’environnement définies dans son interface, exécute les commandes de déploiement (migrations, loaddata, collectstatic) et démarre le serveur avec Gunicorn.
+4. **Sentry** est automatiquement activé pour remonter les erreurs de production si un `SENTRY_DSN` est fourni.
+
+---
+
+### Configuration requise
+
+Avant tout déploiement, assurez-vous d’avoir :
+
+- Un compte Docker Hub (et les identifiants en secrets GitHub `DOCKER_USERNAME`, `DOCKER_PASSWORD`).
+- Un compte Render avec un service Docker configuré.
+- Les fichiers suivants bien présents et configurés :
+  - `Dockerfile`
+  - `.env` (non committé) contenant `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, `SENTRY_DSN`
+  - `docker-compose.yml` (utile pour les tests en local)
+  - `.github/workflows/ci.yml` et `ci-cd.yml` pour les tests et la CI/CD Docker.
+
+---
+
+### Étapes de déploiement
+
+#### 1. Déploiement automatique via GitHub et Render (prod)
+
+1. **Configurer GitHub Actions** :
+   - Ajoutez vos identifiants Docker dans `Settings > Secrets and variables > Actions` :
+     - `DOCKER_USERNAME`
+     - `DOCKER_PASSWORD`
+
+2. **Configurer Render** :
+   - Créez un nouveau service Render de type **Docker**.
+   - Renseignez :
+     - **Image URL** : `martinlabi/oc-lettings-site:latest`
+     - **Start command** : Laissez vide (géré par le `CMD` dans Dockerfile).
+   - Ajoutez dans **Environment > Environment Variables** :
+     - `SECRET_KEY`
+     - `DEBUG=False`
+     - `ALLOWED_HOSTS=yourdomain.onrender.com`
+     - `SENTRY_DSN` (optionnel)
+
+3. **Pousser sur GitHub** (`main`) :
+   - Les tests tournent automatiquement.
+   - L’image est publiée sur Docker Hub.
+   - Render la récupère et déploie le projet.
+
+---
+
+#### 2. Déploiement/test local avec Docker Compose
+
+1. Copier ou créer un fichier `.env` :
+   ```env
+   SECRET_KEY=your_secret_key
+   DEBUG=True
+   ALLOWED_HOSTS=localhost,127.0.0.1
+   SENTRY_DSN=
+
+
+
+2. Lancer le site local
+
+  docker-compose up --build
+
+
+3. Accéder au site :
+
+  http://localhost:8000
+
+  Admin : http://localhost:8000/admin (user/pass définis dans fixtures/users.json)
