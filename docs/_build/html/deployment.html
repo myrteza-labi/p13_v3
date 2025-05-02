@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html lang="fr" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Déploiement et gestion &#8212; Documentation Orange County Lettings </title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=d1a510d7"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=e6b791cb"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="prev" title="Tests et couverture" href="testing.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="deploiement-et-gestion">
+<h1>Déploiement et gestion<a class="headerlink" href="#deploiement-et-gestion" title="Lien vers cette rubrique">¶</a></h1>
+<p>La CI/CD et le déploiement se font via GitHub Actions, Docker Hub et Render.</p>
+<ol class="arabic">
+<li><p><strong>Tests et build</strong>
+- À chaque push sur <cite>main</cite>, GitHub Actions exécute <cite>flake8</cite>, <cite>pytest</cite> (coverage) puis construit l’image Docker.
+- Les workflows sont définis dans :</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><cite>.github/workflows/ci.yml</cite></p></li>
+<li><p><cite>.github/workflows/ci-cd.yml</cite></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>Publication de l’image Docker</strong>
+- L’image est poussée sur Docker Hub sous <cite>martinlabi/oc-lettings-site:latest</cite>.
+- Les identifiants Docker sont configurés dans les secrets GitHub (<cite>DOCKER_USERNAME</cite>, <cite>DOCKER_PASSWORD</cite>).</p></li>
+<li><p><strong>Déploiement sur Render</strong>
+- Render récupère l’image Docker et lance :</p>
+<blockquote>
+<div><p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>bash
+docker run </p>
+<blockquote>
+<div><p>-e SECRET_KEY=&lt;SECRET_KEY&gt; -e DEBUG=False -e ALLOWED_HOSTS=&lt;HOST&gt; -e SENTRY_DSN=&lt;SENTRY_DSN&gt; martinlabi/oc-lettings-site:latest</p>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Render exécute ensuite les migrations, <cite>collectstatic</cite> et démarre Gunicorn.</p></li>
+</ul>
+</li>
+<li><p><strong>Surveillance des erreurs</strong>
+- Sentry (via <cite>sentry-sdk</cite>) remonte automatiquement les erreurs si <cite>SENTRY_DSN</cite> est défini.</p></li>
+</ol>
+<p>Pour un <strong>test local</strong> avec Docker Compose :</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>bash
+docker-compose up –build</p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Orange County Lettings</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Sommaire</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="description.html">Présentation du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation et configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Démarrage rapide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tech_stack.html">Technologies et outils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database_models.html">Structure de la base de données et modèles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">Référence de l’API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templates.html">Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="management_commands.html">Commandes de gestion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Tests et couverture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Déploiement et gestion</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="testing.html" title="Chapitre précédent">Tests et couverture</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Martin Labi.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/deployment.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
