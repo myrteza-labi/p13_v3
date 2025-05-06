@@ -24,3 +24,9 @@ def custom_404(request, exception):
     """Custom handler for 404 errors."""
     logger.warning(f"404 error encountered: {request.path} - {exception}")
     return render(request, '404.html', status=404)
+
+
+def custom_500(request):
+    """Custom handler for 500 errors."""
+    logger.error("500 error encountered")
+    return render(request, '500.html', status=500)
