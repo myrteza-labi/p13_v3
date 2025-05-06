@@ -30,3 +30,8 @@ def custom_500(request):
     """Custom handler for 500 errors."""
     logger.error("500 error encountered")
     return render(request, '500.html', status=500)
+
+
+def trigger_internal_error(request):
+    """View to intentionally trigger a 500 error (for testing)."""
+    raise Exception("Triggered internal 500 error for test")

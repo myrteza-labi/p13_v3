@@ -13,7 +13,6 @@ def trigger_error(request):
 
 
 handler404 = 'oc_lettings_site.views.custom_404'
-
 handler500 = 'oc_lettings_site.views.custom_500'
 
 urlpatterns = [
@@ -22,6 +21,7 @@ urlpatterns = [
     path('lettings/', include('lettings.urls', namespace='lettings')),
     path('profiles/', include('profiles.urls', namespace='profiles')),
     path('sentry-debug/', trigger_error),
+    path('force-500/', views.trigger_internal_error),  # test route for 500 error
 ]
 
 # Serve static files in all environments (even when DEBUG=False)
