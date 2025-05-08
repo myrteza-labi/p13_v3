@@ -26,7 +26,7 @@ exclude_patterns = []
 
 # Thème HTML
 html_theme = 'alabaster'
-language = 'fr'
+language = 'french'
 html_static_path = ['_static']
 
 # Autodoc config optionnelle (facultatif)
