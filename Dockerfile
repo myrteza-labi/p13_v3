@@ -41,5 +41,5 @@ CMD ["sh", "-c", "\
     echo '🚀 MIGRATIONS' && python manage.py migrate --noinput && \
     echo '📦 LOADDATA' && python manage.py loaddata fixtures/users.json fixtures/lettings.json fixtures/profiles.json && \
     echo '🧹 COLLECTSTATIC' && python manage.py collectstatic --noinput && \
-    echo '🔥 Gunicorn Start' && gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000\
+    echo '🔥 Gunicorn Start' && gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:8000 --timeout 120
 "]
